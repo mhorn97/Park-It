@@ -1,0 +1,22 @@
+body{
+    font-family: San Francisco, Helvetica, sans-serif;
+    background-color: white;
+}
+nav{
+    background-color: white;
+    color: black;
+    box-shadow: 3px 3px darkgray;
+}
+button{
+    background-color: white;
+    color: #0080ff;
+}
+#instructions,#map,#directions{
+    border-radius: 10px;
+    border: 1px solid;
+    background-color: white;
+}
+#gotIt{
+    border:5px;
+    color: white;
+}
