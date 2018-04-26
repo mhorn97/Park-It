@@ -7,7 +7,7 @@ body {
     padding: 15px 5px;
     font-size: 20pt;
     text-align: center;
-    potition: fixed; /* to top of screen */
+    position: fixed; /* to top of screen */
     top: 0px;
     left: 0px;
     z-index: 10; /* scrolling happens beneath nav bar */
@@ -49,8 +49,17 @@ button {
     margin: 15px auto;
     padding: 0px 10px;
 }
+#directions {
+    position: relative;
+    height: auto; /* will grow as needed */
+    width: 90%;
+    margin: 15px auto;
+    padding: 10px;
+}
 
-
+.center {
+    text-align: center;
+}
 
 
 
