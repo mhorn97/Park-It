@@ -42,9 +42,9 @@ button {
     font-size: 17pt;
 }
 
-#map {
+#map{
     position: relative;
-    height: 320px; /* necessary to display on screen */
+    height: 320px;
     width: 90%;
     margin: 15px auto;
     padding: 0px 10px;
