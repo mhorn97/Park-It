@@ -17,7 +17,7 @@ function onDeviceReady() {
         window.StatusBar.styleDefault();
     } else{
         $('head').append('<link rel="stylesheet" href="css/park-it-android.css" type="text/css" />');
-        window.StatusBar.backgroundColorByHexString('#1565C0');
+        window.StatusBar.backgroundColorByHexString("#1565C0");
     }
     /*var node = document.createElement('link');
     node.setAttribute('rel', 'stylesheet');
@@ -78,11 +78,13 @@ function setParkingLocation() {
     navigator.geolocation.getCurrentPosition(setParkingLocationSuccess,setParkingLocationError, { enabledHighAccuracy: true});
 }
 
-function setParkingLocationSuccess(postion) {
+function setParkingLocationSuccess(position) {
     latitude = position.coords.latitude;
     storage.setItem("parkedLatitude", latitude);
 
     //Add statements to store the longitude
+    longitude = position.coords.longitude;
+    storage.setItem("parkedLongitude", longitude);
 
     //Display an alert that shows the latitude and longitude
     //Use navigator.notification.alert(msg)
