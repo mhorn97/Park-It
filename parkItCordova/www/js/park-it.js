@@ -19,21 +19,6 @@ function onDeviceReady() {
         $('head').append('<link rel="stylesheet" href="css/park-it-android.css" type="text/css" />');
         window.StatusBar.backgroundColorByHexString("#1565C0");
     }
-    /*var node = document.createElement('link');
-    node.setAttribute('rel', 'stylesheet');
-    node.setAttribute('type', 'text/css');
-
-    if(corda.platformid == 'ios') {
-        node.setAttribute('href', 'styles/park-it-ios.css');
-
-        window.StatusBar.overlayWebsView(false);
-        window.StatusBar.styleDefault();
-    } else {
-        node.setAttribute('href', 'styles/park-it-android.css');
-        window.StatusBar.backgroundColorByHexStrings("#1565C0");
-    }
-
-    $('head').appendChild(node);s*/
 }
 
 $("#park").click(function () {
@@ -57,6 +42,12 @@ $("#gotIt").click(function () {
 
 });
 
+$("#find").click(function () {
+    getParkingLocation();
+})
+
+
+
 function initMap() {
     var position = {lat: 47.318561, lng: -122.22567};
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -68,10 +59,10 @@ function initMap() {
     var trafficLayer = new google.maps.TrafficLayer();
     trafficLayer.setMap(map);
 
-    var marker = new google.maps.Marker({
+    /*var marker = new google.maps.Marker({
         position: position,
         map: map
-    });
+    });*/
 }
 
 function setParkingLocation() {
@@ -98,11 +89,75 @@ function setParkingLocationError(error) {
 }
 
 function showParkingLocation() {
-    navigator.notification.alert("You are parked at Lat: " +
+    /*navigator.notification.alert("You are parked at Lat: " +
     storage.getItem("parkedLatitude")
-        + ", Long: " + storage.getItem("parkedLongitude"));
+        + ", Long: " + storage.getItem("parkedLongitude"));*/
 
     //hide directions and instructions
+    $("#instructions").hide();
+    $("#directions").hide();
+
+    var latLong = new google.maps.LatLng(latitude.longitude);
+    var map = new google.maps.Map(document.getElementById('map'));
+
+    map.setZoom(16);
+    map.setCenter(latLong);
+    var marker = new google.maps.Marker({
+        position:latLong,
+        map:map
+    });
+}
+
+function getParkingLocation()
+{
+    navigator.geolocation.getCurrentPosition(getParkingLocationSuccess,
+        getParkingLocationError, {enableHighAccuracy:true});
+}
+
+function getParkingLocationSuccess(position)
+{
+    currentLatitude = position.coords.latitude;
+    currentLongitude = position.coords.longitude;
+    parkedLatitude = storage.getItem("parkedLatitude");
+    parkedLongitude = storage.getItem("parkedLongitude");
+
+    showDirections();
+}
+
+function showDirections()
+{
+    var dRenderer = new google.maps.DirectionsRenderer;
+    var dService = new google.maps.DirectionsService;
+    var curLatLong = new google.maps.LatLng(currentLatitude,
+        currentLongitude);
+    var parkedLatLong = new google.maps.LatLng(parkedLatitude,
+        parkedLongitude);
+    var map = new google.maps.Map(document.getElementById("map"));
+    map.setZoom(16);
+    map.setCenter(curLatLong);
+    dRenderer.setMap(map);
+    dService.route({
+        origin: curLatLong,
+        destination: parkedLatLong,
+        travelMode: 'DRIVING',
+    }, function(response, status){
+        if(status == 'OK'){
+            dRenderer.setDirections(response);
+            $('#directions').html('');
+            dRenderer.setPanel(document.getElementById('directions'));
+        } else{
+            navigator.notification.alert("Directions failed: " + status);
+        }
+    });
+    $('#map').show();
+    $('#directions').show();
+    $('#instructions').hide();
+}
+
+function getParkingLocationError(error)
+{
+    navigator.notification.alert("Error Code: " + error.code
+    + "\nError Message: " + error.message);
 }
 
 $("document").ready(init);
